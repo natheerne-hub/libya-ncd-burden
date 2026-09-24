@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 
 REQUIRED = ["measure_name", "location_name", "sex_name", "age_name", "cause_name",
@@ -62,3 +63,61 @@ def daly_composition(df: pd.DataFrame, year: int, metric: str = "Rate") -> pd.Da
 def cause_trend(df: pd.DataFrame, cause: str, measure: str = "DALYs", metric: str = "Rate") -> pd.DataFrame:
     s = _slice(df, measure, metric)
     return s[s.cause_name == cause].sort_values("year")[["year", "val", "lower", "upper"]].reset_index(drop=True)
+
+
+# --- Language-independent extraction (IDs) and economic-input derivation -----------------
+# GBD Results exports carry numeric IDs alongside names; names follow the site language
+# (e.g. Arabic), so everything below keys on IDs.
+MEASURE_IDS = {2: "dalys", 3: "ylds", 6: "incidence"}
+CAUSE_IDS = {491: "cardiovascular_diseases", 493: "ischemic_heart_disease", 494: "stroke"}
+METRIC_NUMBER, AGE_ALL = 1, 22
+
+
+def extract_inputs(export_path: Path, location: str = "Libya") -> pd.DataFrame:
+    """Reduce a GBD Results export to the few aggregate numbers the model uses."""
+    df = pd.read_csv(export_path)
+    need = {"measure_id", "cause_id", "metric_id", "age_id", "sex_id", "year", "val", "lower", "upper"}
+    missing = need - set(df.columns)
+    if missing:
+        raise ValueError(f"export lacks ID columns {sorted(missing)} — re-download with IDs included")
+    d = df[df.measure_id.isin(MEASURE_IDS) & df.cause_id.isin(CAUSE_IDS)
+           & (df.metric_id == METRIC_NUMBER) & (df.age_id == AGE_ALL) & (df.sex_id == 3)].copy()
+    d["measure"] = d.measure_id.map(MEASURE_IDS)
+    d["cause"] = d.cause_id.map(CAUSE_IDS)
+    d.insert(0, "location", location)
+    return d[["location", "cause", "measure", "year", "val", "lower", "upper"]].sort_values(
+        ["cause", "measure", "year"]).reset_index(drop=True)
+
+
+def derive_economic_inputs(extract: pd.DataFrame, population_30_79: float, prevalence: float,
+                           rr_hypertension: float, discount_rate: float, spread_years: int,
+                           year: int | None = None) -> dict:
+    """Derive the CVD event rate and DALYs per event from GBD IHD + stroke estimates.
+
+    * events   = incident IHD + incident stroke (all ages)
+    * event rate in hypertensives r1: split total events between hypertensives and
+      normotensives, with hypertensives at `rr_hypertension` times the risk:
+          events / N = r0 · (1 + p · (RR − 1)),  r1 = RR · r0
+    * DALYs per event = (IHD + stroke DALYs) / events — a steady-state approximation of
+      the undiscounted lifetime burden of one event — then discounted assuming that burden
+      is spread evenly over `spread_years`.
+    """
+    year = year or int(extract.year.max())
+    x = extract[extract.year == year].set_index(["cause", "measure"])
+    causes = ["ischemic_heart_disease", "stroke"]
+    events = sum(x.loc[(c, "incidence"), "val"] for c in causes)
+    dalys = sum(x.loc[(c, "dalys"), "val"] for c in causes)
+    ylds = sum(x.loc[(c, "ylds"), "val"] for c in causes)
+    r0 = (events / population_30_79) / (1 + prevalence * (rr_hypertension - 1))
+    t = np.arange(1, spread_years + 1)
+    discount_factor = float(np.sum(1 / (1 + discount_rate) ** t)) / spread_years
+    undiscounted = dalys / events
+    return {
+        "year": year,
+        "events": float(events),
+        "dalys": float(dalys),
+        "yll_share_pct": float(100 * (1 - ylds / dalys)),
+        "event_rate_hypertensive": float(rr_hypertension * r0),
+        "dalys_per_event_undiscounted": float(undiscounted),
+        "dalys_per_event_discounted": float(undiscounted * discount_factor),
+    }
