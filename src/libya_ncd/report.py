@@ -55,6 +55,29 @@ def write_report(r: dict, cfg: dict, path: Path) -> Path:
     else:
         gbd_text = "Not available — see data/README.md."
 
+    bu = r.get("burden")
+    if bu:
+        rows = "\n".join(f"| {i + 1} | {c['cause']} | {c['dalys']:,.0f} | {c['dalys_share_pct']:.1f}% | {c['yll_share_pct']:.0f}% |"
+                          for i, c in enumerate(bu["leading"]))
+        cvd = " · ".join(f"{cfg['countries'][k]} {v:.1f}%" for k, v in bu["cvd_share_by_country"].items())
+        burden_text = f"""Non-communicable diseases made up **{bu['ncd_share_pct']:.0f}%** of all DALYs in {name} in {bu['base_year']}.
+{bu['base_year']} is used as the baseline because injury DALYs spike in 2023, the year of the Derna flood: unintentional-injury DALYs rose from
+{bu['injury_dalys_2022']:,.0f} (2022) to {bu['injury_dalys_2023']:,.0f} (2023). Self-harm & interpersonal violence (which includes war)
+peaked at {bu['violence_peak_share']:.1f}% of DALYs in {bu['violence_peak_year']}, and respiratory infections (which include COVID-19 in GBD 2023)
+at {bu['resp_peak_share']:.1f}% in {bu['resp_peak_year']}; their 2022 share is still above pre-pandemic levels.
+
+| Rank | Cause (GBD level 2) | DALYs | Share | From premature death (YLL) |
+|---:|---|---:|---:|---:|
+{rows}
+
+Cardiovascular share of DALYs, {bu['base_year']}: {cvd}.
+
+![Leading causes](figures/08_leading_causes_libya.png)
+![Share by country](figures/09_daly_share_by_country.png)
+![Shocks](figures/10_burden_shocks_libya.png)"""
+    else:
+        burden_text = "Not available."
+
     text = f"""# Results — {name}
 
 *Generated automatically by `run_pipeline.py` from `{r['data_source']}`. Do not edit by hand.*
@@ -127,7 +150,11 @@ Most influential input: `{e['most_influential_parameter']}`.
 ![Tornado](figures/06_tornado.png)
 ![CEAC](figures/07_ceac.png)
 
-## 6. Inputs derived from GBD 2023 (Libya)
+## 6. Burden of disease in Libya (GBD 2023)
+
+{burden_text}
+
+## 7. Inputs derived from GBD 2023 (Libya)
 
 {gbd_text}
 """
