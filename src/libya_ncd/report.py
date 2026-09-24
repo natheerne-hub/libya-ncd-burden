@@ -131,7 +131,7 @@ In {name}, {_pct(cas['undiagnosed'], 0)} of people with hypertension are undiagn
 > {assump_list}). Two structural assumptions sit inside the GBD derivation (section 6). Treat the results as preliminary.
 
 Inputs from data ({e['input_year']}): prevalence {_pct(100 * e['prevalence'])}, current control {_pct(100 * e['current_control'])}.
-Implied GDP per capita (WHO GHED): US${e['gdp_per_capita_usd']:,.0f}.
+GDP per capita (threshold reference): US${e['gdp_per_capita_usd']:,.0f} ({e['gdp_per_capita_source']}).
 
 | Output ({cfg['economics']['horizon_years']}-year horizon, {100 * cfg['economics']['discount_rate']:.0f}% discount) | Base case |
 |---|---:|
