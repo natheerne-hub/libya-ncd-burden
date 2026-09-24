@@ -123,6 +123,27 @@ class TestEconomics(unittest.TestCase):
             econ.beta_draw(np.random.default_rng(0), 0.5, 0.6, 10)
 
 
+class TestGBDDerivation(unittest.TestCase):
+    EXTRACT = ROOT / "data" / "snapshot" / "gbd_2023_libya_extract.csv"
+
+    def test_derivation_matches_hand_calculation(self):
+        x = pd.read_csv(self.EXTRACT)
+        d = gbd.derive_economic_inputs(x, population_30_79=3_527_480, prevalence=0.427,
+                                       rr_hypertension=2.0, discount_rate=0.03, spread_years=15)
+        y = x[x.year == 2023].set_index(["cause", "measure"]).val
+        events = y[("ischemic_heart_disease", "incidence")] + y[("stroke", "incidence")]
+        dalys = y[("ischemic_heart_disease", "dalys")] + y[("stroke", "dalys")]
+        r0 = events / 3_527_480 / (1 + 0.427)
+        self.assertAlmostEqual(d["event_rate_hypertensive"], 2 * r0, places=10)
+        self.assertAlmostEqual(d["dalys_per_event_undiscounted"], dalys / events, places=8)
+        self.assertLess(d["dalys_per_event_discounted"], d["dalys_per_event_undiscounted"])
+
+    def test_higher_relative_risk_gives_higher_rate_in_hypertensives(self):
+        x = pd.read_csv(self.EXTRACT)
+        rates = [gbd.derive_economic_inputs(x, 3.5e6, 0.43, rr, 0.03, 15)["event_rate_hypertensive"] for rr in (1.5, 2, 3)]
+        self.assertTrue(rates[0] < rates[1] < rates[2])
+
+
 class TestGBD(unittest.TestCase):
     FIX = ROOT / "tests" / "fixtures" / "gbd_synthetic.csv"
 
