@@ -4,7 +4,7 @@ Work planned before the next scholarship applications. Tick items off as they ar
 
 ## Before the January 2027 deadlines
 - [x] Download a Libya GBD 2023 export and derive the economic inputs from it
-- [ ] Download a second GBD export with all level-2 causes and add a "leading causes" figure
+- [x] Download a second GBD export with all level-2 causes; add leading-causes, cross-country and shocks figures
 - [x] Replace `population_30_79` with the UN World Population Prospects value (3.53 M, WPP 2024)
 - [x] Source treatment cost (WHO HEARTS), treatment effect (Ettehad 2016) and cost per CVD event (Moroccan cost-of-illness studies)
 - [x] Derive the CVD event rate and DALYs per event from GBD 2023
