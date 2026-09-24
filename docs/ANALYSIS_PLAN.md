@@ -26,8 +26,9 @@ Gulf states were left out because their income levels and health-financing model
   extrapolation, not a forecast model.
 * **Cascade**: WHO publishes diagnosis, treatment and control as percentages of *all* people with
   hypertension, so the losses between stages can be subtracted directly.
-* **Implied GDP per capita** = CHE per capita ÷ (CHE % GDP). Using WHO's own pair of series keeps the
-  numerator and denominator consistent. It is used only as a reference point for the cost-effectiveness threshold.
+* **GDP per capita (threshold reference)**: World Bank, current US$ (NY.GDP.PCAP.CD), set in `config.yaml`
+  (US$6,318 for 2024). If it is removed, the pipeline falls back to the GDP implied by WHO GHED
+  (CHE per capita ÷ CHE % GDP). It is used only as a reference point for the cost-effectiveness threshold.
 * **Uncertainty**: WHO 95% uncertainty intervals are shown for Libya and passed into the PSA
   (hypertension prevalence and control are drawn from beta distributions fitted to them).
 
