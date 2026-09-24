@@ -220,26 +220,26 @@
     "current_control": 0.111,
     "target_control": 0.5,
     "base_case": {
-      "hypertensives": 1281000.0000000002,
-      "additional_controlled": 498309.0000000001,
-      "gross_cost": 193979291.2432163,
-      "cost_offsets": 22821093.087437212,
-      "net_cost": 171158198.1557791,
-      "events_averted": 9966.180000000002,
-      "dalys_averted": 27385.311704924658,
-      "icer_per_daly": 6249.999999999999,
-      "cost_per_event_averted": 18749.999999999996
+      "hypertensives": 1506233.9600000002,
+      "additional_controlled": 585925.0104400001,
+      "gross_cost": 144901708.99933144,
+      "cost_offsets": 38640455.73315506,
+      "net_cost": 106261253.26617639,
+      "events_averted": 11718.500208800004,
+      "dalys_averted": 32200.37977762921,
+      "icer_per_daly": 3300.0,
+      "cost_per_event_averted": 9900.0
     },
     "gdp_per_capita_usd": 6026.944266495837,
-    "psa_icer_median": 6548.901372440725,
+    "psa_icer_median": 3409.2060173337677,
     "psa_icer_95ui": [
-      2259.3954805434323,
-      18747.03469921397
+      507.39492481845883,
+      10941.85618870978
     ],
     "prob_cost_effective": {
-      "0.5x_gdp": 0.0738,
-      "1x_gdp": 0.4372,
-      "3x_gdp": 0.972
+      "0.5x_gdp": 0.4226,
+      "1x_gdp": 0.8248,
+      "3x_gdp": 0.9984
     },
     "most_influential_parameter": "baseline_cvd_event_rate_uncontrolled"
   },

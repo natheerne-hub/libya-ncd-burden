@@ -64,24 +64,24 @@ In Libya, 52% of people with hypertension are undiagnosed and only **11.1%** are
 
 ## 5. Health-economic scenario: hypertension control to 50% in Libya
 
-> ⚠️ **Illustrative.** Several inputs are placeholders (`source: assumption` in `config.yaml`). The structure and
-> uncertainty analysis are the deliverable; the numbers become policy-relevant only once those inputs are sourced.
+> ⚠️ **Partly illustrative.** 3 of 7 inputs are still placeholders (`source: assumption` in `config.yaml`:
+> `programme_cost_per_additional_patient`, `baseline_cvd_event_rate_uncontrolled`, `dalys_per_cvd_event`). Treat the results as preliminary until those are sourced.
 
 Inputs from data (2019): prevalence 42.7%, current control 11.1%.
 Implied GDP per capita (WHO GHED): US$6,027.
 
 | Output (5-year horizon, 3% discount) | Base case |
 |---|---:|
-| Additional people controlled | 498,309 |
-| Gross programme cost (US$) | 193,979,291 |
-| Averted CVD treatment costs (US$) | 22,821,093 |
-| Net cost (US$) | 171,158,198 |
-| Major CVD events averted | 9,966 |
-| DALYs averted (discounted) | 27,385 |
-| **Net cost per DALY averted** | **US$6,250** |
+| Additional people controlled | 585,925 |
+| Gross programme cost (US$) | 144,901,709 |
+| Averted CVD treatment costs (US$) | 38,640,456 |
+| Net cost (US$) | 106,261,253 |
+| Major CVD events averted | 11,719 |
+| DALYs averted (discounted) | 32,200 |
+| **Net cost per DALY averted** | **US$3,300** |
 
-PSA (5,000 draws): median ICER US$6,549
-(95% UI 2,259 to 18,747). Probability cost-effective — 0.5x GDP/cap: 7% · 1x GDP/cap: 44% · 3x GDP/cap: 97%.
+PSA (5,000 draws): median ICER US$3,409
+(95% UI 507 to 10,942). Probability cost-effective — 0.5x GDP/cap: 42% · 1x GDP/cap: 82% · 3x GDP/cap: 100%.
 Most influential input: `baseline_cvd_event_rate_uncontrolled`.
 
 ![Tornado](figures/06_tornado.png)
