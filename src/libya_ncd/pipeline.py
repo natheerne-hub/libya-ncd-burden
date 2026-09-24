@@ -130,6 +130,36 @@ def run(fetch: bool = False) -> dict:
     else:
         results["gbd"] = {"status": "full export not present; economic inputs use the committed extract"}
 
+    # GBD level-2 burden: leading causes, cross-country shares, shocks over time
+    burden_path = ROOT / "data" / "snapshot" / "gbd_2023_level2_burden.csv"
+    if burden_path.exists():
+        from . import gbd as _gbd
+        burden = _gbd.load_burden(burden_path)
+        base_year = 2022  # injury DALYs spike ~9x in 2023, the year of the Derna flood
+        lead = _gbd.leading_causes(burden, focus, base_year, n=10)
+        lead.to_csv(TABLES / "gbd_leading_causes_libya.csv", index=False)
+        top_causes = list(lead.cause.head(8))
+        mat = _gbd.share_matrix(burden, base_year, top_causes)
+        mat.to_csv(TABLES / "gbd_daly_share_by_country.csv")
+        lby = burden[burden.iso3 == focus]
+        inj = lby[lby.cause == "Unintentional injuries"].set_index("year").dalys
+        vio = lby[lby.cause == "Self-harm & interpersonal violence"].set_index("year")
+        results["burden"] = {
+            "base_year": base_year,
+            "leading": lead[["cause", "dalys", "dalys_share_pct", "yll_share_pct"]].to_dict("records"),
+            "ncd_share_pct": float(lby[(lby.year == base_year) & lby.cause_id.isin(
+                [410, 491, 508, 526, 542, 558, 626, 640, 653, 669, 973, 974])].dalys_share_pct.sum()),
+            "cvd_share_rank_among_countries": int(mat.loc["Cardiovascular diseases"].rank(ascending=False)[focus]),
+            "cvd_share_by_country": mat.loc["Cardiovascular diseases"].to_dict(),
+            "injury_dalys_2022": float(inj.get(2022)), "injury_dalys_2023": float(inj.get(2023)),
+            "violence_peak_year": int(vio.dalys_share_pct.idxmax()), "violence_peak_share": float(vio.dalys_share_pct.max()),
+            "resp_peak_year": int(lby[lby.cause_id == 956].set_index("year").dalys_share_pct.idxmax()),
+            "resp_peak_share": float(lby[lby.cause_id == 956].dalys_share_pct.max()),
+        }
+        plots.fig_leading_causes(lead, base_year, FIGURES / "08_leading_causes_libya.png")
+        plots.fig_burden_heatmap(mat, cfg, base_year, FIGURES / "09_daly_share_by_country.png")
+        plots.fig_burden_shocks(burden, focus, FIGURES / "10_burden_shocks_libya.png")
+
     # Figures
     plots.fig_premature_mortality(df, cfg, sdg[focus], FIGURES / "01_premature_ncd_mortality.png")
     plots.fig_mortality_by_sex(df, cfg, FIGURES / "02_libya_mortality_by_sex.png")
