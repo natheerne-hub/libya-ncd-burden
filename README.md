@@ -26,7 +26,7 @@ health-economic model for one concrete intervention: **scaling up hypertension c
 | ⚠️ **Risk factors** | Libya ranks **highest of the five countries** for diabetes (28.0%), hypertension (42.7%) and physical inactivity (45.6%), and second for obesity (33.7%). |
 | 🩺 **Care cascade** | Of Libyans with hypertension, **52% are undiagnosed** and only **11%** have it controlled (2019). |
 | 💰 **Financing** | Libya has the highest health spending per person in the group (US$470, 2023) and the lowest out-of-pocket share (19%), but per-capita spending is the most volatile (SD of year-on-year change ≈ 28% vs. 8–15% for neighbours). |
-| 🧮 **Economics** *(preliminary)* | Raising control to 50% gives a base-case net cost of about **US$3,300 per DALY averted** (PSA median US$3,400; 95% UI 500–10,900). The probability of being cost-effective is 42% at 0.5× GDP per capita and 82% at 1×. 4 of 7 inputs are now sourced (UN WPP, WHO HEARTS costing, Ettehad 2016 meta-analysis, Moroccan cost-of-illness studies). The biggest remaining uncertainty is the CVD event rate, which comes next from GBD. |
+| 🧮 **Economics** *(preliminary)* | Raising hypertension control to 50% costs about **US$1,950 per DALY averted** (PSA median US$2,000; 95% UI 650–5,300), with a **99% probability of being cost-effective at 1× GDP per capita** (79% at 0.5×). 6 of 7 inputs are sourced: WHO, UN WPP, GBD 2023, WHO HEARTS costing, the Ettehad 2016 meta-analysis and Moroccan cost-of-illness studies. |
 
 <p align="center"><img src="outputs/figures/01_premature_ncd_mortality.png" width="85%"></p>
 <p align="center"><img src="outputs/figures/04_hypertension_cascade.png" width="85%"></p>
@@ -59,14 +59,14 @@ Economic model and parameter status: [`docs/ECONOMIC_MODEL.md`](docs/ECONOMIC_MO
 | **Epidemiology** | Log-linear average annual rate of change, SDG 3.4 required-vs-observed pace, regional ranking, sex-disaggregated trends with 95% uncertainty intervals |
 | **Health systems** | Hypertension care cascade; financing level, composition (government vs. out-of-pocket) and volatility |
 | **Health economics** | Cohort cost-effectiveness model, one-way sensitivity (tornado), probabilistic sensitivity analysis (5,000 draws, WHO uncertainty propagated), cost-effectiveness acceptability curve |
-| **GBD (optional)** | Loader and validator for an IHME GBD export → leading causes and YLL/YLD composition |
-| **Engineering** | Config-driven, 17 unit tests (including a hand-calculated check of the economic model), GitHub Actions CI that fails if committed results are stale |
+| **GBD 2023** | Committed extract of Libya IHD + stroke incidence and DALYs → CVD event rate and DALYs per event for the economic model; loader for full exports |
+| **Engineering** | Config-driven, 19 unit tests (including a hand-calculated check of the economic model), GitHub Actions CI that fails if committed results are stale |
 
 ## Reproduce
 
 ```bash
 pip install -r requirements.txt
-pytest -q                          # 17 tests
+pytest -q                          # 19 tests
 python run_pipeline.py             # snapshot → tables, figures, outputs/RESULTS.md
 python run_pipeline.py --fetch     # refresh from the WHO API first
 ```
@@ -93,7 +93,7 @@ python run_pipeline.py --fetch     # refresh from the WHO API first
 
 WHO NCD estimates for Libya are **modelled** from limited survey data, so the uncertainty intervals are wide.
 Comparisons between countries are ecological. Figures from conflict years need careful interpretation.
-The economic model still has **3 placeholder inputs** (flagged in `config.yaml`), so its results are preliminary.
+The economic model still has **1 placeholder input** and 2 stated assumptions inside its GBD derivation, so its results are preliminary.
 Full list: [`docs/ANALYSIS_PLAN.md`](docs/ANALYSIS_PLAN.md#limitations-to-state-in-any-write-up).
 
 ## Data & licence
