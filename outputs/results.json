@@ -7,9 +7,9 @@
       "latest_year": 2021,
       "latest_value": 19.8,
       "target_value": 13.60068,
-      "observed_aarc": -0.004552026571141664,
+      "observed_aarc": -0.004552026571141725,
       "required_aarc": -0.04087045265500544,
-      "projected_target_year_value": 19.003442944720092,
+      "projected_target_year_value": 19.00344294472007,
       "on_track": false
     },
     "TUN": {
@@ -18,9 +18,9 @@
       "latest_year": 2021,
       "latest_value": 13.0,
       "target_value": 10.333850000000002,
-      "observed_aarc": -0.020504353427910786,
+      "observed_aarc": -0.020504353427911307,
       "required_aarc": -0.02518026852849986,
-      "projected_target_year_value": 10.788621156921135,
+      "projected_target_year_value": 10.788621156921081,
       "on_track": false
     },
     "DZA": {
@@ -29,9 +29,9 @@
       "latest_year": 2021,
       "latest_value": 13.3,
       "target_value": 9.46714,
-      "observed_aarc": -0.014631083788128687,
+      "observed_aarc": -0.01463108378812892,
       "required_aarc": -0.0370663778717496,
-      "projected_target_year_value": 11.647731871091409,
+      "projected_target_year_value": 11.647731871091386,
       "on_track": false
     },
     "EGY": {
@@ -40,9 +40,9 @@
       "latest_year": 2021,
       "latest_value": 26.0,
       "target_value": 20.067670000000003,
-      "observed_aarc": -0.023101095160863023,
+      "observed_aarc": -0.023101095160863706,
       "required_aarc": -0.028366181139425795,
-      "projected_target_year_value": 21.067837144356243,
+      "projected_target_year_value": 21.067837144356112,
       "on_track": false
     },
     "MAR": {
@@ -51,9 +51,9 @@
       "latest_year": 2021,
       "latest_value": 22.0,
       "target_value": 15.13409,
-      "observed_aarc": -0.0033503540460736035,
+      "observed_aarc": -0.003350354046073732,
       "required_aarc": -0.040713834477698496,
-      "projected_target_year_value": 21.3454508475018,
+      "projected_target_year_value": 21.34545084750178,
       "on_track": false
     }
   },
@@ -161,7 +161,7 @@
       "gov_share_of_che_pct": 80.14829837394744,
       "oop_share_pct": 19.177,
       "oop_share_first": 51.291,
-      "che_pc_aarc_pct": 3.898845947116373,
+      "che_pc_aarc_pct": 3.8988459471163575,
       "che_pc_volatility_pct": 27.80562408156408,
       "implied_gdp_per_capita_usd": 6026.944266495837
     },
@@ -173,7 +173,7 @@
       "gov_share_of_che_pct": 54.0854867646596,
       "oop_share_pct": 37.94,
       "oop_share_first": 38.63,
-      "che_pc_aarc_pct": 3.54851183460681,
+      "che_pc_aarc_pct": 3.548511834606799,
       "che_pc_volatility_pct": 8.627823927938008,
       "implied_gdp_per_capita_usd": 3978.8353162179083
     },
@@ -185,7 +185,7 @@
       "gov_share_of_che_pct": 53.07589800281945,
       "oop_share_pct": 45.002,
       "oop_share_first": 25.795,
-      "che_pc_aarc_pct": 6.218836480558088,
+      "che_pc_aarc_pct": 6.218836480558064,
       "che_pc_volatility_pct": 15.30043509280051,
       "implied_gdp_per_capita_usd": 5363.801424959779
     },
@@ -197,7 +197,7 @@
       "gov_share_of_che_pct": 32.24996640996811,
       "oop_share_pct": 57.195,
       "oop_share_first": 62.489,
-      "che_pc_aarc_pct": 5.206743987191982,
+      "che_pc_aarc_pct": 5.206743987191963,
       "che_pc_volatility_pct": 13.957539853140666,
       "implied_gdp_per_capita_usd": 2895.39312039312
     },
@@ -209,7 +209,7 @@
       "gov_share_of_che_pct": 56.532671971340974,
       "oop_share_pct": 37.254,
       "oop_share_first": 53.866,
-      "che_pc_aarc_pct": 5.515834152684505,
+      "che_pc_aarc_pct": 5.515834152684487,
       "che_pc_volatility_pct": 8.361323078336708,
       "implied_gdp_per_capita_usd": 3829.947229551451
     }
