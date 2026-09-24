@@ -87,7 +87,34 @@ Most influential input: `baseline_cvd_event_rate_uncontrolled`.
 ![Tornado](figures/06_tornado.png)
 ![CEAC](figures/07_ceac.png)
 
-## 6. Inputs derived from GBD 2023 (Libya)
+## 6. Burden of disease in Libya (GBD 2023)
+
+Non-communicable diseases made up **76%** of all DALYs in Libya in 2022.
+2022 is used as the baseline because injury DALYs spike in 2023, the year of the Derna flood: unintentional-injury DALYs rose from
+87,802 (2022) to 769,048 (2023). Self-harm & interpersonal violence (which includes war)
+peaked at 21.1% of DALYs in 2011, and respiratory infections (which include COVID-19 in GBD 2023)
+at 20.8% in 2021; their 2022 share is still above pre-pandemic levels.
+
+| Rank | Cause (GBD level 2) | DALYs | Share | From premature death (YLL) |
+|---:|---|---:|---:|---:|
+| 1 | Cardiovascular diseases | 436,810 | 20.9% | 91% |
+| 2 | Other non-communicable diseases | 199,911 | 9.5% | 54% |
+| 3 | Neoplasms | 193,794 | 9.3% | 98% |
+| 4 | Mental disorders | 174,296 | 8.3% | 0% |
+| 5 | Diabetes & kidney diseases | 151,516 | 7.2% | 49% |
+| 6 | Musculoskeletal disorders | 145,658 | 6.9% | 1% |
+| 7 | Respiratory infections & TB | 137,573 | 6.6% | 69% |
+| 8 | Unintentional injuries | 87,802 | 4.2% | 56% |
+| 9 | Neurological disorders | 84,422 | 4.0% | 26% |
+| 10 | Transport injuries | 80,382 | 3.8% | 83% |
+
+Cardiovascular share of DALYs, 2022: Algeria 21.4% · Egypt 27.8% · Libya 20.9% · Morocco 30.1% · Tunisia 11.4%.
+
+![Leading causes](figures/08_leading_causes_libya.png)
+![Share by country](figures/09_daly_share_by_country.png)
+![Shocks](figures/10_burden_shocks_libya.png)
+
+## 7. Inputs derived from GBD 2023 (Libya)
 
 From `data/snapshot/gbd_2023_libya_extract.csv` (GBD 2023 round, year 2023, all ages, both sexes): 25,398 incident ischaemic heart disease + stroke events and 379,212 DALYs, 93% of them from premature death (YLL).
 
