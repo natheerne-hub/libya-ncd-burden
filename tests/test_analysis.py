@@ -115,7 +115,8 @@ class TestEconomics(unittest.TestCase):
         pd.testing.assert_frame_equal(a, b)
         curve = econ.ceac(a, np.linspace(0, 30000, 50))
         self.assertTrue((np.diff(curve.prob_cost_effective) >= 0).all())
-        self.assertEqual(curve.prob_cost_effective.iloc[0], 0.0)
+        # at WTP = 0 the only 'cost-effective' draws are the cost-saving ones
+        self.assertAlmostEqual(curve.prob_cost_effective.iloc[0], float((a.net_cost < 0).mean()))
 
     def test_beta_rejects_impossible_moments(self):
         with self.assertRaises(ValueError):
