@@ -8,3 +8,6 @@ data/raw/*
 # GBD data may not be redistributed — keep your export local
 data/external/*
 !data/external/.gitkeep
+# Policy brief: fonts are fetched at build time; HTML is an intermediate (PDFs are committed by CI)
+docs/brief/fonts/*.ttf
+docs/brief/*.html
