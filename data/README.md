@@ -35,7 +35,25 @@
 value sums (all 65 groups matched exactly). `validate_who()` re-checks ranges, duplicates and interval
 consistency on every run.
 
-## Adding GBD (optional, recommended)
+## GBD 2023 extract (committed)
+
+`snapshot/gbd_2023_libya_extract.csv` holds 18 aggregate estimates for Libya (all ages, both sexes, 2000 and 2023):
+incidence, DALYs and YLDs for cardiovascular diseases, ischaemic heart disease and stroke. They were extracted with
+`gbd.extract_inputs()` from a GBD Results export downloaded on 24 September 2026. The extraction keys on GBD's
+numeric IDs, so an export in any site language works. The full export stays local (`external/`, git-ignored).
+
+> Global Burden of Disease Collaborative Network. Global Burden of Disease Study 2023 (GBD 2023) Results.
+> Seattle, United States: Institute for Health Metrics and Evaluation (IHME), 2024.
+> Available from https://vizhub.healthdata.org/gbd-results/.
+
+To refresh or extend it, download a new export (steps below) and run:
+
+```bash
+python -c "import sys; sys.path.insert(0,'src'); from libya_ncd import gbd; \
+gbd.extract_inputs('data/external/<export>.csv').round(3).to_csv('data/snapshot/gbd_2023_libya_extract.csv', index=False)"
+```
+
+## Downloading a GBD export
 
 1. Go to the IHME **GBD Results** tool (vizhub.healthdata.org/gbd-results) and sign in (free).
 2. Select — *Location:* Libya · *Measure:* DALYs, YLLs, YLDs, Deaths · *Metric:* Rate and Number ·
