@@ -144,6 +144,21 @@ class TestGBDDerivation(unittest.TestCase):
         self.assertTrue(rates[0] < rates[1] < rates[2])
 
 
+class TestGBDBurden(unittest.TestCase):
+    BURDEN = ROOT / "data" / "snapshot" / "gbd_2023_level2_burden.csv"
+
+    def test_level2_shares_cover_all_dalys(self):
+        b = pd.read_csv(self.BURDEN)
+        sums = b.groupby(["iso3", "year"]).dalys_share_pct.sum()
+        self.assertTrue(((sums > 99.5) & (sums < 100.5)).all(), sums[(sums <= 99.5) | (sums >= 100.5)])
+        self.assertTrue((b.ylds <= b.dalys + 1).all())
+
+    def test_leading_causes_sorted_and_2022_led_by_cvd(self):
+        lead = gbd.leading_causes(gbd.load_burden(self.BURDEN), "LBY", 2022, n=5)
+        self.assertTrue(lead.dalys.is_monotonic_decreasing)
+        self.assertEqual(lead.cause.iloc[0], "Cardiovascular diseases")
+
+
 class TestGBD(unittest.TestCase):
     FIX = ROOT / "tests" / "fixtures" / "gbd_synthetic.csv"
 
