@@ -46,6 +46,11 @@ numeric IDs, so an export in any site language works. The full export stays loca
 > Seattle, United States: Institute for Health Metrics and Evaluation (IHME), 2024.
 > Available from https://vizhub.healthdata.org/gbd-results/.
 
+`snapshot/gbd_2023_level2_burden.csv` holds DALYs, share of all DALYs and YLDs for the 22 GBD level-2 causes (by `cause_id`; names are attached by `gbd.load_burden()`):
+every year 2000–2023 for Libya, and 2022 for Tunisia, Algeria, Egypt and Morocco (616 rows, all ages, both sexes).
+It was built with `gbd.extract_burden()` from a second export downloaded the same day. Libya 2022 is the baseline
+year, because injury DALYs spike almost 9× in 2023, the year of the Derna flood.
+
 To refresh or extend it, download a new export (steps below) and run:
 
 ```bash
