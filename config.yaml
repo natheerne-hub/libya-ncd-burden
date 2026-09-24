@@ -108,6 +108,12 @@ economics:
   discount_rate: 0.03
   target_control_rate: 0.50      # scenario: half of all hypertensives controlled
   wtp_multiples_of_gdp_pc: [0.5, 1.0, 3.0]
+  # Reference point for the cost-effectiveness threshold (not a salary; see local_context below)
+  gdp_per_capita:
+    value_usd: 6318
+    year: 2024
+    source: World Bank, GDP per capita (current US$), NY.GDP.PCAP.CD
+
   psa_iterations: 5000
   random_seed: 20260924
   params:
@@ -160,3 +166,13 @@ economics:
     extract: data/snapshot/gbd_2023_libya_extract.csv
     rr_hypertension: 2.0     # assumption: relative CVD risk of hypertensive vs normotensive adults (tested 1.5–3)
     spread_years: 15         # assumption: years over which one event's DALYs accrue (for discounting)
+
+# Local context used only to translate results into everyday terms (policy brief)
+local_context:
+  avg_monthly_salary_lyd: 2500
+  salary_note: >-
+    Public-sector average. Central Bank of Libya wage bill ÷ public employees gives about 2,260 LYD/month (2023:
+    57 bn LYD, 2.1 M employees) to 2,780 LYD/month (2025: 73.3 bn LYD, ~2.2 M employees). Private sector not included.
+  exchange_rate_official: 6.50
+  exchange_rate_parallel: 9.80
+  exchange_rate_date: 2026-09
