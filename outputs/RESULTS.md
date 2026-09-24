@@ -68,7 +68,7 @@ In Libya, 52% of people with hypertension are undiagnosed and only **11.1%** are
 > `programme_cost_per_additional_patient`). Two structural assumptions sit inside the GBD derivation (section 6). Treat the results as preliminary.
 
 Inputs from data (2019): prevalence 42.7%, current control 11.1%.
-Implied GDP per capita (WHO GHED): US$6,027.
+GDP per capita (threshold reference): US$6,318 (World Bank, GDP per capita (current US$), NY.GDP.PCAP.CD, 2024).
 
 | Output (5-year horizon, 3% discount) | Base case |
 |---|---:|
@@ -81,7 +81,7 @@ Implied GDP per capita (WHO GHED): US$6,027.
 | **Net cost per DALY averted** | **US$1,949** |
 
 PSA (5,000 draws): median ICER US$1,993
-(95% UI 646 to 5,321). Probability cost-effective — 0.5x GDP/cap: 79% · 1x GDP/cap: 99% · 3x GDP/cap: 100%.
+(95% UI 646 to 5,321). Probability cost-effective — 0.5x GDP/cap: 81% · 1x GDP/cap: 99% · 3x GDP/cap: 100%.
 Most influential input: `baseline_cvd_event_rate_uncontrolled`.
 
 ![Tornado](figures/06_tornado.png)
