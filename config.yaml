@@ -129,12 +129,12 @@ economics:
       note: Extra scale-up cost (screening, training, information system) per newly controlled patient-year. Replace with a Libyan programme budget.
       dist: {type: gamma, cv: 0.50}
     baseline_cvd_event_rate_uncontrolled:
-      value: 0.020
-      source: assumption
+      value: 0.0101          # overwritten at run time by the GBD derivation below
+      source: gbd
       note: >-
-        Annual major CVD events per uncontrolled hypertensive (≈ 18% over 10 years). Not yet sourced: derive from GBD Libya
-        IHD + stroke incidence, or check against the WHO 2019 North Africa & Middle East CVD risk charts.
-      dist: {type: beta, sd: 0.005}
+        Derived from GBD 2023 Libya incident IHD + stroke, split between hypertensive and normotensive adults 30–79
+        assuming hypertensives carry `rr_hypertension` times the risk (see gbd_derivation).
+      dist: {type: beta, cv: 0.20}
     relative_risk_reduction_if_controlled:
       value: 0.20
       source: literature
@@ -148,7 +148,15 @@ economics:
         (Cureus 2023) and US$3,520 for ischaemic heart disease (Value Health Reg Issues 2026;52). Libyan hospital costing preferred.
       dist: {type: gamma, cv: 0.40}
     dalys_per_cvd_event:
-      value: 3.0
-      source: assumption
-      note: Discounted DALYs lost per major CVD event. Derive from GBD Libya (DALYs ÷ incident cases, IHD + stroke).
+      value: 11.9            # overwritten at run time by the GBD derivation below
+      source: gbd
+      note: >-
+        GBD 2023 Libya (IHD + stroke DALYs) ÷ (incident IHD + stroke) = lifetime burden per event (undiscounted),
+        discounted at `discount_rate` assuming the burden is spread over `spread_years`.
       dist: {type: gamma, cv: 0.30}
+
+  # How the two `source: gbd` inputs above are derived from data/snapshot/gbd_2023_libya_extract.csv
+  gbd_derivation:
+    extract: data/snapshot/gbd_2023_libya_extract.csv
+    rr_hypertension: 2.0     # assumption: relative CVD risk of hypertensive vs normotensive adults (tested 1.5–3)
+    spread_years: 15         # assumption: years over which one event's DALYs accrue (for discounting)
