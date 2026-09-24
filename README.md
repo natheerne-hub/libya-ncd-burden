@@ -6,6 +6,8 @@
 
 **Dr. Nather Yunis Suliaman, MD** · Public-health data analysis · Python · reproducible research
 
+📄 **Policy brief (2 pages):** [English PDF](docs/brief/policy_brief_en.pdf) · [PDF بالعربية](docs/brief/policy_brief_ar.pdf)
+
 ---
 
 ## Why this project
@@ -89,7 +91,7 @@ python run_pipeline.py --fetch     # refresh from the WHO API first
 │   └── report.py               # writes outputs/RESULTS.md
 ├── data/  snapshot/ · raw/ · external/  (see data/README.md)
 ├── outputs/  figures/ · tables/ · RESULTS.md · results.json
-├── docs/  ANALYSIS_PLAN.md · ECONOMIC_MODEL.md
+├── docs/  ANALYSIS_PLAN.md · ECONOMIC_MODEL.md · ROADMAP.md · brief/ (policy brief, EN + AR)
 └── tests/
 ```
 
