@@ -1,8 +1,9 @@
 # Economic model: scaling up hypertension control in Libya
 
-> **Status: partly sourced.** The model structure, code and uncertainty analysis are complete and tested.
-> 4 of 7 inputs now come from data or published literature. 3 are still `source: assumption` in `config.yaml`
-> (programme overhead, CVD event rate, DALYs per event), so results remain preliminary until those are sourced.
+> **Status: mostly sourced.** The model structure, code and uncertainty analysis are complete and tested.
+> 6 of 7 inputs come from data, GBD 2023 or published literature. One (programme overhead) is still an
+> assumption, and the GBD derivation rests on two stated assumptions (relative risk of hypertensives, and the
+> years over which an event's DALYs accrue). Results are preliminary until those are checked.
 
 ## Decision problem
 
@@ -41,12 +42,27 @@ and it is the right first step before building a state-transition model.
 | Population 30–79 | 3.53 M | data | UN World Population Prospects 2024, sum of 5-year groups 30–34 … 75–79 |
 | Treatment cost / patient-year | US$44 | literature | Upper end of US$18–44 per person treated per year for the WHO HEARTS package in LMICs: Moran AE, et al. *Rev Panam Salud Publica* 2022;46:e140. Upper end chosen because Libya is upper-middle-income; a Libyan medicine-price survey would be better |
 | Programme overhead / new patient-year | US$10 | **assumption** | Libyan programme budget, or the WHO HEARTS costing tool |
-| Annual major CVD event rate if uncontrolled | 2.0% | **assumption** | ≈ 18% over 10 years; not yet sourced. Derive from GBD Libya IHD + stroke incidence, or check against the WHO 2019 North Africa & Middle East CVD risk charts (Kaptoge S, et al. *Lancet Glob Health* 2019) |
+| Annual major CVD event rate if uncontrolled | 1.01% | GBD 2023 (derived) | 25,398 incident IHD + stroke events in Libya in 2023 (GBD 2023), split between hypertensive and normotensive adults 30–79 assuming hypertensives carry 2× the risk (0.89% at 1.5×, 1.17% at 3×) |
 | Relative risk reduction if controlled | 20% | literature | RR 0.80 (95% CI 0.77–0.83) for major CVD events per 10 mmHg SBP reduction: Ettehad D, et al. *Lancet* 2016;387:957–67. Conservative, because moving from uncontrolled to controlled often lowers SBP by more than 10 mmHg |
 | Cost per major CVD event | US$3,600 | literature (regional proxy) | Morocco, mean first-year direct cost per patient: US$3,674 for ischaemic stroke (Fez, *Cureus* 2023) and US$3,520 for ischaemic heart disease (*Value Health Reg Issues* 2026;52). Libyan hospital costing preferred; Libya's higher health spending suggests this is conservative |
-| DALYs per CVD event | 3.0 | **assumption** | Derive from GBD Libya (DALYs ÷ incident cases for IHD + stroke) |
+| DALYs per CVD event | 11.9 | GBD 2023 (derived) | 379,212 IHD + stroke DALYs ÷ 25,398 events = 14.9 per event (undiscounted, steady-state approximation), discounted at 3% assuming the burden accrues over 15 years |
 
 `population_30_79` changes the size of the programme but not the ratio: the ICER is independent of it, and a unit test enforces this.
+
+### How the GBD inputs are derived
+
+`gbd.derive_economic_inputs()` uses the committed extract `data/snapshot/gbd_2023_libya_extract.csv`:
+
+```
+events            = incident IHD + incident stroke (Libya, 2023, all ages)
+events / N₃₀₋₇₉   = r₀ · (1 + p · (RR − 1))        p = hypertension prevalence, RR = 2 (assumption)
+rate in hypertensives r₁ = RR · r₀
+DALYs per event   = (IHD + stroke DALYs) / events, discounted over 15 years
+```
+
+Two simplifications to state in any write-up. Events at ages 80+ are included in the numerator but not in
+the denominator, which slightly overstates the rate. DALYs ÷ incidence is a cross-sectional approximation
+of the lifetime burden per event.
 
 ## Uncertainty
 
