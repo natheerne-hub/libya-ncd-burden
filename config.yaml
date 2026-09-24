@@ -112,37 +112,43 @@ economics:
   random_seed: 20260924
   params:
     population_30_79:
-      value: 3000000
-      source: assumption
-      note: Replace with UN World Population Prospects estimate for Libya, ages 30–79.
-      dist: {type: normal, sd: 150000}
+      value: 3527480
+      source: data
+      note: UN World Population Prospects 2024, Libya, sum of 5-year groups 30–34 … 75–79 (2024).
+      dist: {type: normal, sd: 176000}
     annual_cost_per_controlled_patient:
-      value: 60
-      source: assumption
-      note: Generic antihypertensives + follow-up visits (US$/patient/year). Replace with Libyan costing.
-      dist: {type: gamma, cv: 0.30}
+      value: 44
+      source: literature
+      note: >-
+        Upper end of the US$18–44 per person treated per year for the WHO HEARTS package in LMICs
+        (Moran et al., Rev Panam Salud Publica 2022;46:e140). Upper end chosen because Libya is upper-middle-income.
+      dist: {type: gamma, cv: 0.35}
     programme_cost_per_additional_patient:
-      value: 25
+      value: 10
       source: assumption
-      note: Screening, training, information system per newly controlled patient (US$/year).
-      dist: {type: gamma, cv: 0.40}
+      note: Extra scale-up cost (screening, training, information system) per newly controlled patient-year. Replace with a Libyan programme budget.
+      dist: {type: gamma, cv: 0.50}
     baseline_cvd_event_rate_uncontrolled:
       value: 0.020
       source: assumption
-      note: Annual major CVD events per uncontrolled hypertensive. Replace with regional cohort data.
+      note: >-
+        Annual major CVD events per uncontrolled hypertensive (≈ 18% over 10 years). Not yet sourced: derive from GBD Libya
+        IHD + stroke incidence, or check against the WHO 2019 North Africa & Middle East CVD risk charts.
       dist: {type: beta, sd: 0.005}
     relative_risk_reduction_if_controlled:
       value: 0.20
       source: literature
-      note: ~20% fewer major CVD events per 10 mmHg SBP reduction (Ettehad et al., Lancet 2016). Verify and cite.
-      dist: {type: beta, sd: 0.03}
+      note: RR 0.80 (95% CI 0.77–0.83) for major CVD events per 10 mmHg SBP reduction (Ettehad et al., Lancet 2016;387:957–67).
+      dist: {type: beta, sd: 0.015}
     cost_per_cvd_event:
-      value: 2500
-      source: assumption
-      note: Acute care cost per major CVD event (US$). Replace with Libyan hospital costing.
+      value: 3600
+      source: literature
+      note: >-
+        Regional proxy: mean first-year direct cost per patient in Morocco of US$3,674 for ischaemic stroke
+        (Cureus 2023) and US$3,520 for ischaemic heart disease (Value Health Reg Issues 2026;52). Libyan hospital costing preferred.
       dist: {type: gamma, cv: 0.40}
     dalys_per_cvd_event:
       value: 3.0
       source: assumption
-      note: Discounted DALYs lost per major CVD event. Derive from GBD Libya once downloaded.
+      note: Discounted DALYs lost per major CVD event. Derive from GBD Libya (DALYs ÷ incident cases, IHD + stroke).
       dist: {type: gamma, cv: 0.30}
