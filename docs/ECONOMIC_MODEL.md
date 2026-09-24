@@ -74,7 +74,7 @@ of the lifetime burden per event.
 
 ## On thresholds
 
-The chart marks 0.5×, 1× and 3× GDP per capita per DALY (World Bank 2024: US$6,318) only as reference points. The 1–3× GDP rule has
+The chart marks 0.5×, 1× and 3× GDP per capita per DALY (World Bank 2024: US$6,569) only as reference points. The 1–3× GDP rule has
 been widely criticised as too permissive, and WHO-CHOICE no longer recommends it. Evidence-based estimates
 of country thresholds based on health opportunity cost are usually well below 1× GDP per capita
 (e.g. Woods B, et al. *Value Health* 2016). Presenting the full CEAC instead of a yes/no verdict follows from this.
