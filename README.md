@@ -26,7 +26,7 @@ health-economic model for one concrete intervention: **scaling up hypertension c
 | ⚠️ **Risk factors** | Libya ranks **highest of the five countries** for diabetes (28.0%), hypertension (42.7%) and physical inactivity (45.6%), and second for obesity (33.7%). |
 | 🩺 **Care cascade** | Of Libyans with hypertension, **52% are undiagnosed** and only **11%** have it controlled (2019). |
 | 💰 **Financing** | Libya has the highest health spending per person in the group (US$470, 2023) and the lowest out-of-pocket share (19%), but per-capita spending is the most volatile (SD of year-on-year change ≈ 28% vs. 8–15% for neighbours). |
-| 🧮 **Economics** *(illustrative)* | Raising control to 50% gives a base-case net cost of about US$6,250 per DALY averted. The probability of being cost-effective is 44% at 1× GDP per capita and 97% at 3×. The result is most sensitive to the CVD event rate (a placeholder, so the first input to source) and the treatment effect. |
+| 🧮 **Economics** *(preliminary)* | Raising control to 50% gives a base-case net cost of about **US$3,300 per DALY averted** (PSA median US$3,400; 95% UI 500–10,900). The probability of being cost-effective is 42% at 0.5× GDP per capita and 82% at 1×. 4 of 7 inputs are now sourced (UN WPP, WHO HEARTS costing, Ettehad 2016 meta-analysis, Moroccan cost-of-illness studies). The biggest remaining uncertainty is the CVD event rate, which comes next from GBD. |
 
 <p align="center"><img src="outputs/figures/01_premature_ncd_mortality.png" width="85%"></p>
 <p align="center"><img src="outputs/figures/04_hypertension_cascade.png" width="85%"></p>
@@ -93,7 +93,7 @@ python run_pipeline.py --fetch     # refresh from the WHO API first
 
 WHO NCD estimates for Libya are **modelled** from limited survey data, so the uncertainty intervals are wide.
 Comparisons between countries are ecological. Figures from conflict years need careful interpretation.
-The economic model uses **placeholder inputs** (flagged in `config.yaml`) and shows method, not a policy estimate.
+The economic model still has **3 placeholder inputs** (flagged in `config.yaml`), so its results are preliminary.
 Full list: [`docs/ANALYSIS_PLAN.md`](docs/ANALYSIS_PLAN.md#limitations-to-state-in-any-write-up).
 
 ## Data & licence
