@@ -7,6 +7,14 @@ on:
     - cron: "0 6 1 * *"   # monthly: check the WHO API still returns the expected schema
   workflow_dispatch:
 
+# Only the newest run per branch matters; older ones are cancelled so the auto-commit below never races.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
 jobs:
   snapshot:
     name: Tests + pipeline on committed snapshot
@@ -20,8 +28,16 @@ jobs:
       - run: pip install -r requirements.txt
       - run: pytest -q
       - run: python run_pipeline.py
-      - name: Fail if committed outputs are stale
+      - name: Fail if committed outputs are stale (pull requests)
+        if: github.event_name == 'pull_request'
         run: git diff --exit-code -- outputs/RESULTS.md
+      - name: Commit regenerated outputs (pushes to main)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898702+github-actions[bot]@users.noreply.github.com"
+          git add outputs
+          git diff --cached --quiet || (git commit -m "Regenerate outputs [skip ci]" && git push)
       - uses: actions/upload-artifact@v4
         with:
           name: outputs
