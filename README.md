@@ -22,6 +22,7 @@ health-economic model for one concrete intervention: **scaling up hypertension c
 
 | | Finding |
 |---|---|
+| 🏥 **Burden (GBD 2023)** | Non-communicable diseases caused **76% of Libya's disease burden** in 2022. Cardiovascular disease is the leading cause (20.9% of DALYs, 91% of it from premature death), followed by other NCDs, cancers and mental disorders. On top of this rising NCD load come shocks: violence reached 21% of all DALYs in 2011, COVID-19 pushed respiratory infections to 21% in 2021, and injury DALYs rose almost 9× in 2023, the year of the Derna flood. |
 | 📉 **SDG 3.4** | Premature NCD mortality was **19.8%** in 2021, almost unchanged from 20.0% in 2000. Meeting the 2030 target (13.6%) needs about −4.1% per year, but the observed trend since 2015 is −0.5% per year. **Not on track.** |
 | ⚠️ **Risk factors** | Libya ranks **highest of the five countries** for diabetes (28.0%), hypertension (42.7%) and physical inactivity (45.6%), and second for obesity (33.7%). |
 | 🩺 **Care cascade** | Of Libyans with hypertension, **52% are undiagnosed** and only **11%** have it controlled (2019). |
@@ -30,9 +31,12 @@ health-economic model for one concrete intervention: **scaling up hypertension c
 
 <p align="center"><img src="outputs/figures/01_premature_ncd_mortality.png" width="85%"></p>
 <p align="center"><img src="outputs/figures/04_hypertension_cascade.png" width="85%"></p>
+<p align="center"><img src="outputs/figures/10_burden_shocks_libya.png" width="95%"></p>
 
 <details><summary><b>More figures</b></summary>
 
+![Leading causes](outputs/figures/08_leading_causes_libya.png)
+![Share of DALYs by country](outputs/figures/09_daly_share_by_country.png)
 ![Risk factors](outputs/figures/03_risk_factors.png)
 ![Financing](outputs/figures/05_health_financing.png)
 ![By sex](outputs/figures/02_libya_mortality_by_sex.png)
@@ -59,14 +63,14 @@ Economic model and parameter status: [`docs/ECONOMIC_MODEL.md`](docs/ECONOMIC_MO
 | **Epidemiology** | Log-linear average annual rate of change, SDG 3.4 required-vs-observed pace, regional ranking, sex-disaggregated trends with 95% uncertainty intervals |
 | **Health systems** | Hypertension care cascade; financing level, composition (government vs. out-of-pocket) and volatility |
 | **Health economics** | Cohort cost-effectiveness model, one-way sensitivity (tornado), probabilistic sensitivity analysis (5,000 draws, WHO uncertainty propagated), cost-effectiveness acceptability curve |
-| **GBD 2023** | Committed extract of Libya IHD + stroke incidence and DALYs → CVD event rate and DALYs per event for the economic model; loader for full exports |
-| **Engineering** | Config-driven, 19 unit tests (including a hand-calculated check of the economic model), GitHub Actions CI that fails if committed results are stale |
+| **GBD 2023** | Level-2 causes for Libya (2000–2023) and neighbours (2022): leading causes, YLL/YLD split, cross-country shares, conflict and disaster shocks. IHD + stroke incidence and DALYs → CVD event rate and DALYs per event for the economic model |
+| **Engineering** | Config-driven, 21 unit tests (including a hand-calculated check of the economic model), GitHub Actions CI that fails if committed results are stale |
 
 ## Reproduce
 
 ```bash
 pip install -r requirements.txt
-pytest -q                          # 19 tests
+pytest -q                          # 21 tests
 python run_pipeline.py             # snapshot → tables, figures, outputs/RESULTS.md
 python run_pipeline.py --fetch     # refresh from the WHO API first
 ```
@@ -98,4 +102,4 @@ Full list: [`docs/ANALYSIS_PLAN.md`](docs/ANALYSIS_PLAN.md#limitations-to-state-
 
 ## Data & licence
 
-Data: [WHO Global Health Observatory](https://www.who.int/data/gho) (subject to WHO terms). Code: MIT.
+Data: [WHO Global Health Observatory](https://www.who.int/data/gho) (subject to WHO terms) and GBD 2023 (Global Burden of Disease Collaborative Network, IHME 2024; aggregate extracts only). Code: MIT.
