@@ -39,6 +39,22 @@ def write_report(r: dict, cfg: dict, path: Path) -> Path:
     assump_list = ", ".join(f"`{k}`" for k in assump)
     pce = " · ".join(f"{k.replace('_gdp', '')} GDP/cap: {100 * v:.0f}%" for k, v in e["prob_cost_effective"].items())
 
+    g = r.get("gbd_derived")
+    if g:
+        gbd_text = (
+            f"From `data/snapshot/gbd_2023_libya_extract.csv` (GBD 2023 round, year {g['year']}, all ages, both sexes): "
+            f"{g['events']:,.0f} incident ischaemic heart disease + stroke events and {g['dalys']:,.0f} DALYs, "
+            f"{g['yll_share_pct']:.0f}% of them from premature death (YLL).\n\n"
+            f"| Derived input | Value | Assumption behind it |\n|---|---:|---|\n"
+            f"| Annual major CVD event rate in hypertensives | {100 * g['event_rate_hypertensive']:.2f}% "
+            f"| hypertensives at {g['rr_hypertension']:g}× the risk of normotensives "
+            f"({100 * g['event_rate_if_rr_1_5']:.2f}% at 1.5×, {100 * g['event_rate_if_rr_3']:.2f}% at 3×) |\n"
+            f"| DALYs per event (discounted) | {g['dalys_per_event_discounted']:.1f} "
+            f"| {g['dalys_per_event_undiscounted']:.1f} undiscounted, spread over {g['spread_years']} years |\n\n"
+            "Citation: Global Burden of Disease Collaborative Network. GBD 2023 Results. IHME, 2024.")
+    else:
+        gbd_text = "Not available — see data/README.md."
+
     text = f"""# Results — {name}
 
 *Generated automatically by `run_pipeline.py` from `{r['data_source']}`. Do not edit by hand.*
@@ -88,8 +104,8 @@ In {name}, {_pct(cas['undiagnosed'], 0)} of people with hypertension are undiagn
 
 ## 5. Health-economic scenario: hypertension control to {100 * e['target_control']:.0f}% in {name}
 
-> ⚠️ **Partly illustrative.** {n_assump} of {n_params} inputs are still placeholders (`source: assumption` in `config.yaml`:
-> {assump_list}). Treat the results as preliminary until those are sourced.
+> ⚠️ **Partly illustrative.** {n_assump} of {n_params} inputs {"is" if n_assump == 1 else "are"} still {"a placeholder" if n_assump == 1 else "placeholders"} (`source: assumption` in `config.yaml`:
+> {assump_list}). Two structural assumptions sit inside the GBD derivation (section 6). Treat the results as preliminary.
 
 Inputs from data ({e['input_year']}): prevalence {_pct(100 * e['prevalence'])}, current control {_pct(100 * e['current_control'])}.
 Implied GDP per capita (WHO GHED): US${e['gdp_per_capita_usd']:,.0f}.
@@ -111,9 +127,9 @@ Most influential input: `{e['most_influential_parameter']}`.
 ![Tornado](figures/06_tornado.png)
 ![CEAC](figures/07_ceac.png)
 
-## 6. GBD module
+## 6. Inputs derived from GBD 2023 (Libya)
 
-{r['gbd']['status']}
+{gbd_text}
 """
     path.write_text(text, encoding="utf-8")
     return path
