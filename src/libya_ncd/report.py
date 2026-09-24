@@ -33,6 +33,10 @@ def write_report(r: dict, cfg: dict, path: Path) -> Path:
         f"| {cfg['countries'][k]} | {f['che_per_capita_usd']:,.0f} | {f['che_pct_gdp']:.1f} | "
         f"{f['gov_share_of_che_pct']:.0f} | {f['oop_share_pct']:.0f} | {f['che_pc_volatility_pct']:.0f} |"
         for k, f in r["financing"].items())
+    params = cfg["economics"]["params"]
+    assump = [k for k, v in params.items() if v["source"] == "assumption"]
+    n_assump, n_params = len(assump), len(params)
+    assump_list = ", ".join(f"`{k}`" for k in assump)
     pce = " · ".join(f"{k.replace('_gdp', '')} GDP/cap: {100 * v:.0f}%" for k, v in e["prob_cost_effective"].items())
 
     text = f"""# Results — {name}
@@ -84,8 +88,8 @@ In {name}, {_pct(cas['undiagnosed'], 0)} of people with hypertension are undiagn
 
 ## 5. Health-economic scenario: hypertension control to {100 * e['target_control']:.0f}% in {name}
 
-> ⚠️ **Illustrative.** Several inputs are placeholders (`source: assumption` in `config.yaml`). The structure and
-> uncertainty analysis are the deliverable; the numbers become policy-relevant only once those inputs are sourced.
+> ⚠️ **Partly illustrative.** {n_assump} of {n_params} inputs are still placeholders (`source: assumption` in `config.yaml`:
+> {assump_list}). Treat the results as preliminary until those are sourced.
 
 Inputs from data ({e['input_year']}): prevalence {_pct(100 * e['prevalence'])}, current control {_pct(100 * e['current_control'])}.
 Implied GDP per capita (WHO GHED): US${e['gdp_per_capita_usd']:,.0f}.
