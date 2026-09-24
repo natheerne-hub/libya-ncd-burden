@@ -240,4 +240,4 @@ def fig_ceac(curve: pd.DataFrame, gdp_pc: float, multiples: list[float], path: P
     ax.set_xlabel("Willingness to pay per DALY averted (US$)")
     ax.set_ylabel("Probability cost-effective (%)")
     ax.set_title("Cost-effectiveness acceptability curve: hypertension-control scale-up")
-    return _finish(fig, path, "Probabilistic sensitivity analysis; illustrative parameters — see config.yaml and docs/ECONOMIC_MODEL.md.")
+    return _finish(fig, path, "Probabilistic sensitivity analysis, 5,000 draws. Inputs and their sources: config.yaml and docs/ECONOMIC_MODEL.md.")
