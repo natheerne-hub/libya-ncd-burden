@@ -73,6 +73,27 @@ def run(fetch: bool = False) -> dict:
     prev_row = df[(df.indicator_code == "NCD_HYP_PREVALENCE_A") & (df.iso3 == focus) & (df.year == cas["year"])].iloc[0]
     ctrl_row = df[(df.indicator_code == "NCD_HYP_CONTROL_A") & (df.iso3 == focus) & (df.year == cas["year"])].iloc[0]
     prevalence, control = prev_row.value / 100, ctrl_row.value / 100
+
+    # Replace the `source: gbd` inputs with values derived from the committed GBD extract
+    from . import gbd
+    gd = cfg["economics"].get("gbd_derivation")
+    if gd and (ROOT / gd["extract"]).exists():
+        params = cfg["economics"]["params"]
+        derived = gbd.derive_economic_inputs(
+            pd.read_csv(ROOT / gd["extract"]), params["population_30_79"]["value"], prevalence,
+            gd["rr_hypertension"], cfg["economics"]["discount_rate"], gd["spread_years"])
+        sens = {rr: gbd.derive_economic_inputs(pd.read_csv(ROOT / gd["extract"]), params["population_30_79"]["value"],
+                                               prevalence, rr, cfg["economics"]["discount_rate"], gd["spread_years"])
+                ["event_rate_hypertensive"] for rr in (1.5, 3.0)}
+        params["baseline_cvd_event_rate_uncontrolled"]["value"] = derived["event_rate_hypertensive"]
+        params["dalys_per_cvd_event"]["value"] = derived["dalys_per_event_discounted"]
+        derived["event_rate_if_rr_1_5"], derived["event_rate_if_rr_3"] = sens[1.5], sens[3.0]
+        derived["rr_hypertension"], derived["spread_years"] = gd["rr_hypertension"], gd["spread_years"]
+        results["gbd_derived"] = derived
+        print(f"GBD-derived inputs: event rate {derived['event_rate_hypertensive']:.4f}/yr, "
+              f"{derived['dalys_per_event_discounted']:.1f} DALYs per event")
+    else:
+        raise SystemExit("GBD extract missing — see data/README.md")
     base = econ.run_model(econ.build_inputs(cfg, prevalence, control))
     owsa = econ.one_way_sensitivity(cfg, prevalence, control)
     owsa.to_csv(TABLES / "one_way_sensitivity.csv", index=False)
@@ -107,8 +128,7 @@ def run(fetch: bool = False) -> dict:
         results["gbd"] = {"year": year, "status": "included"}
         print(f"GBD module: included ({year})")
     else:
-        results["gbd"] = {"status": "skipped — add data/external/gbd_libya.csv (see data/README.md)"}
-        print("GBD module: skipped (no export found)")
+        results["gbd"] = {"status": "full export not present; economic inputs use the committed extract"}
 
     # Figures
     plots.fig_premature_mortality(df, cfg, sdg[focus], FIGURES / "01_premature_ncd_mortality.png")
