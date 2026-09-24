@@ -1,9 +1,8 @@
 # Economic model: scaling up hypertension control in Libya
 
-> **Status: illustrative.** The model structure, code and uncertainty analysis are complete and tested.
-> Several inputs are marked `source: assumption` in `config.yaml`. They are round numbers chosen to be
-> plausible, not measured, and the results should not be quoted as estimates for Libya until those inputs
-> have been replaced with sourced values.
+> **Status: partly sourced.** The model structure, code and uncertainty analysis are complete and tested.
+> 4 of 7 inputs now come from data or published literature. 3 are still `source: assumption` in `config.yaml`
+> (programme overhead, CVD event rate, DALYs per event), so results remain preliminary until those are sourced.
 
 ## Decision problem
 
@@ -35,17 +34,17 @@ and it is the right first step before building a state-transition model.
 
 ## Parameters
 
-| Parameter | Base | Source status | What to replace it with |
+| Parameter | Base | Status | Source / what would replace it |
 |---|---:|---|---|
-| Hypertension prevalence 30–79 | WHO | data | — |
-| Current control rate | WHO | data | — |
-| Population 30–79 | 3.0 M | assumption | UN World Population Prospects, Libya |
-| Treatment cost / patient-year | US$60 | assumption | Libyan public-sector drug prices plus visit costs; WHO HEARTS costing tool |
-| Programme cost / new patient-year | US$25 | assumption | Programme budgets from comparable scale-ups in the region |
-| Annual major CVD event rate if uncontrolled | 2.0% | assumption | Regional cohort data or a validated risk score applied to STEPS data |
-| Relative risk reduction if controlled | 20% | literature | Ettehad D, et al. *Lancet* 2016;387:957–67: about 20% fewer major CVD events per 10 mmHg SBP reduction. Verify that it applies to the achieved BP difference |
-| Cost per major CVD event | US$2,500 | assumption | Libyan hospital costing for MI and stroke admissions |
-| DALYs per CVD event | 3.0 | assumption | Derive from GBD Libya (DALYs ÷ incident events for IHD + stroke) |
+| Hypertension prevalence 30–79 | 42.7% | data | WHO GHO `NCD_HYP_PREVALENCE_A`, 2019 |
+| Current control rate | 11.1% | data | WHO GHO `NCD_HYP_CONTROL_A`, 2019 |
+| Population 30–79 | 3.53 M | data | UN World Population Prospects 2024, sum of 5-year groups 30–34 … 75–79 |
+| Treatment cost / patient-year | US$44 | literature | Upper end of US$18–44 per person treated per year for the WHO HEARTS package in LMICs: Moran AE, et al. *Rev Panam Salud Publica* 2022;46:e140. Upper end chosen because Libya is upper-middle-income; a Libyan medicine-price survey would be better |
+| Programme overhead / new patient-year | US$10 | **assumption** | Libyan programme budget, or the WHO HEARTS costing tool |
+| Annual major CVD event rate if uncontrolled | 2.0% | **assumption** | ≈ 18% over 10 years; not yet sourced. Derive from GBD Libya IHD + stroke incidence, or check against the WHO 2019 North Africa & Middle East CVD risk charts (Kaptoge S, et al. *Lancet Glob Health* 2019) |
+| Relative risk reduction if controlled | 20% | literature | RR 0.80 (95% CI 0.77–0.83) for major CVD events per 10 mmHg SBP reduction: Ettehad D, et al. *Lancet* 2016;387:957–67. Conservative, because moving from uncontrolled to controlled often lowers SBP by more than 10 mmHg |
+| Cost per major CVD event | US$3,600 | literature (regional proxy) | Morocco, mean first-year direct cost per patient: US$3,674 for ischaemic stroke (Fez, *Cureus* 2023) and US$3,520 for ischaemic heart disease (*Value Health Reg Issues* 2026;52). Libyan hospital costing preferred; Libya's higher health spending suggests this is conservative |
+| DALYs per CVD event | 3.0 | **assumption** | Derive from GBD Libya (DALYs ÷ incident cases for IHD + stroke) |
 
 `population_30_79` changes the size of the programme but not the ratio: the ICER is independent of it, and a unit test enforces this.
 
