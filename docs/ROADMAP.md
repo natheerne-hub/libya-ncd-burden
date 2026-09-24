@@ -4,8 +4,9 @@ Work planned before the next scholarship applications. Tick items off as they ar
 
 ## Before the January 2027 deadlines
 - [ ] Download the Libya GBD export (data/README.md), enable the GBD module and add a "leading causes" figure
-- [ ] Replace `population_30_79` with the UN World Population Prospects value
-- [ ] Source the CVD event rate and the cost per event (regional literature; Libyan hospital data if available)
+- [x] Replace `population_30_79` with the UN World Population Prospects value (3.53 M, WPP 2024)
+- [x] Source treatment cost (WHO HEARTS), treatment effect (Ettehad 2016) and cost per CVD event (Moroccan cost-of-illness studies)
+- [ ] Source the CVD event rate and DALYs per event from the Libya GBD export
 - [ ] Write a 2-page policy brief (English + Arabic) from `outputs/RESULTS.md`
 - [ ] Pin this repository on the GitHub profile and link it from the CV and motivation letter
 
