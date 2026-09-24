@@ -121,8 +121,8 @@ def _draw(rng: np.random.Generator, mean: float, dist: dict, n: int) -> np.ndarr
     if kind == "gamma":  # parameterised by mean and coefficient of variation
         shape = 1 / dist["cv"] ** 2
         return rng.gamma(shape, mean / shape, n)
-    if kind == "beta":   # method of moments from mean and sd
-        return beta_draw(rng, mean, dist["sd"], n)
+    if kind == "beta":   # method of moments from mean and sd (or cv)
+        return beta_draw(rng, mean, dist.get("sd", dist.get("cv", 0) * mean), n)
     raise ValueError(f"unknown distribution {kind!r}")
 
 
