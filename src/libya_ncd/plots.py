@@ -241,3 +241,78 @@ def fig_ceac(curve: pd.DataFrame, gdp_pc: float, multiples: list[float], path: P
     ax.set_ylabel("Probability cost-effective (%)")
     ax.set_title("Cost-effectiveness acceptability curve: hypertension-control scale-up")
     return _finish(fig, path, "Probabilistic sensitivity analysis, 5,000 draws. Inputs and their sources: config.yaml and docs/ECONOMIC_MODEL.md.")
+
+
+# --- GBD level-2 burden figures -------------------------------------------------------
+YLL_COLOR, YLD_COLOR = FOCUS, SECOND
+SEQ = ["#cde2fb", "#9ec5f4", "#6da7ec", "#3987e5", "#256abf", "#184f95", "#0d366b"]
+GBD_NOTE = "Source: GBD 2023 (IHME, 2024), all ages, both sexes."
+
+
+def fig_leading_causes(lead: pd.DataFrame, year: int, path: Path):
+    _style()
+    d = lead.iloc[::-1]
+    fig, ax = plt.subplots(figsize=(8.5, 4.8))
+    ax.barh(d.cause, d.ylls / 1e3, color=YLL_COLOR, height=0.62, label="Years of life lost (premature death)",
+            edgecolor=SURFACE, linewidth=2)
+    ax.barh(d.cause, d.ylds / 1e3, left=d.ylls / 1e3, color=YLD_COLOR, height=0.62,
+            label="Years lived with disability", edgecolor=SURFACE, linewidth=2)
+    for i, (_, r) in enumerate(d.iterrows()):
+        ax.text(r.dalys / 1e3 + 4, i, f"{r.dalys_share_pct:.1f}%", va="center", fontsize=8, color=INK_2)
+    ax.grid(axis="x", color=GRID)
+    ax.grid(axis="y", visible=False)
+    ax.set_xlabel("DALYs (thousands)")
+    ax.legend(loc="lower right", fontsize=8)
+    ax.set_title(f"Leading causes of disease burden in Libya, {year}")
+    return _finish(fig, path, GBD_NOTE + f" Labels: share of all DALYs.\n{year} is the baseline: injury DALYs spike in 2023, the year of the Derna flood.")
+
+
+def fig_burden_heatmap(mat: pd.DataFrame, cfg, year: int, path: Path):
+    _style()
+    order = [cfg["focus_country"]] + [c for c in cfg["countries"] if c != cfg["focus_country"]]
+    mat = mat[order]
+    fig, ax = plt.subplots(figsize=(8, 4.6))
+    vmax = float(mat.values.max())
+    bins = np.linspace(0, vmax, len(SEQ) + 1)
+    for i, cause in enumerate(mat.index):
+        for j, iso in enumerate(mat.columns):
+            v = float(mat.loc[cause, iso])
+            k = min(int(np.searchsorted(bins, v, side="right")) - 1, len(SEQ) - 1)
+            ax.add_patch(plt.Rectangle((j, i), 1, 1, facecolor=SEQ[k], edgecolor=SURFACE, linewidth=2))
+            ax.text(j + 0.5, i + 0.5, f"{v:.1f}", ha="center", va="center", fontsize=8,
+                    color="white" if k >= 3 else INK)
+    ax.set_xlim(0, len(mat.columns))
+    ax.set_ylim(len(mat.index), 0)
+    ax.set_xticks(np.arange(len(mat.columns)) + 0.5)
+    ax.set_xticklabels([cfg["countries"][c] for c in mat.columns], fontsize=9)
+    ax.set_yticks(np.arange(len(mat.index)) + 0.5)
+    ax.set_yticklabels(mat.index, fontsize=9)
+    ax.tick_params(length=0)
+    ax.grid(False)
+    for s in ax.spines.values():
+        s.set_visible(False)
+    ax.xaxis.tick_top()
+    ax.get_xticklabels()[0].set_fontweight("bold")
+    ax.set_title(f"Share of all DALYs by cause (%), {year}", pad=24)
+    return _finish(fig, path, GBD_NOTE + " Shares, not rates, so differences in age structure matter less.")
+
+
+def fig_burden_shocks(burden: pd.DataFrame, iso3: str, path: Path):
+    _style()
+    panels = ["Cardiovascular diseases", "Respiratory infections & TB", "Self-harm & interpersonal violence", "Unintentional injuries"]
+    events = {"Self-harm & interpersonal violence": [(2011, "2011 uprising", "right"), (2014, "2014 civil war", "left")],
+              "Respiratory infections & TB": [(2021, "COVID-19", "right")],
+              "Unintentional injuries": [(2023, "Sept 2023 Derna flood", "right")]}
+    fig, axes = plt.subplots(2, 2, figsize=(11, 5.8), sharex=True)
+    for ax, cause in zip(axes.flat, panels):
+        s = burden[(burden.iso3 == iso3) & (burden.cause == cause)].sort_values("year")
+        ax.plot(s.year, s.dalys / 1e3, color=FOCUS)
+        ax.set_title(cause + " — DALYs (thousands)", fontsize=10)
+        ax.set_ylim(0, float(s.dalys.max()) / 1e3 * 1.12)
+        for yr, label, side in events.get(cause, []):
+            ax.axvline(yr, color=MUTED, linewidth=0.8, linestyle=":")
+            ax.annotate(label, (yr, ax.get_ylim()[1]), xytext=(-4 if side == "right" else 4, -10),
+                        textcoords="offset points", ha=side, fontsize=7.5, color=INK_2)
+    fig.suptitle("Libya's disease burden: a rising NCD load, with conflict, pandemic and disaster shocks on top",
+                 x=0.01, ha="left", fontsize=12, fontweight="bold", color=INK)
+    return _finish(fig, path, GBD_NOTE + " GBD counts war under self-harm & interpersonal violence, COVID-19 under respiratory infections,\nand natural disasters under unintentional injuries.")
