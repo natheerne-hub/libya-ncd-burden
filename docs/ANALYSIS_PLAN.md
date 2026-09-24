@@ -39,7 +39,7 @@ Gulf states were left out because their income levels and health-financing model
 2. **Ecological comparison.** Country-level differences do not identify their causes.
 3. **Conflict years.** Health data and spending in 2011 and 2014–2020 are affected by conflict,
    duplicated institutions and exchange-rate distortions (the official and parallel rates diverged).
-4. **Economic model is preliminary.** See `ECONOMIC_MODEL.md`: 3 of 7 inputs are still placeholders.
+4. **Economic model is preliminary.** See `ECONOMIC_MODEL.md`: 1 of 7 inputs is still a placeholder, and the GBD-derived inputs rest on two stated assumptions.
 5. **No sub-national analysis.** Differences between the east, west and south of Libya are likely large but not captured.
 
 ## Extensions
