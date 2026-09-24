@@ -243,16 +243,16 @@
       "icer_per_daly": 1948.697823635149,
       "cost_per_event_averted": 23155.759085186804
     },
-    "gdp_per_capita_usd": 6318.0,
-    "gdp_per_capita_source": "World Bank, GDP per capita (current US$), NY.GDP.PCAP.CD, 2024",
+    "gdp_per_capita_usd": 6569.0,
+    "gdp_per_capita_source": "World Bank, GDP per capita (current US$), NY.GDP.PCAP.CD (WDI update of 13 Jul 2026), 2024",
     "psa_icer_median": 1992.695961181993,
     "psa_icer_95ui": [
       646.3114275750273,
       5320.783791858706
     ],
     "prob_cost_effective": {
-      "0.5x_gdp": 0.8144,
-      "1x_gdp": 0.9882,
+      "0.5x_gdp": 0.8336,
+      "1x_gdp": 0.9904,
       "3x_gdp": 1.0
     },
     "most_influential_parameter": "baseline_cvd_event_rate_uncontrolled"
