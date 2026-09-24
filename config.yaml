@@ -1,0 +1,148 @@
+# ---------------------------------------------------------------------------
+# Libya NCD Burden & Health-Financing Analysis — central configuration
+# Every number used in the analysis is either (a) pulled from a named public
+# source or (b) declared here as an explicit, documented assumption.
+# ---------------------------------------------------------------------------
+
+focus_country: LBY
+
+countries:
+  LBY: Libya
+  TUN: Tunisia
+  DZA: Algeria
+  EGY: Egypt
+  MAR: Morocco
+
+# WHO Global Health Observatory (GHO) OData API — https://ghoapi.azureedge.net/api/
+# `age_group` keeps the overall age band where GHO splits by age.
+who_gho:
+  base_url: https://ghoapi.azureedge.net/api
+  indicators:
+    NCDMORT3070:
+      label: Premature NCD mortality, 30–70 (%)
+      short: Premature NCD mortality
+      domain: outcome
+      age_group: AGEGROUP_YEARS30-69
+      sdg: "3.4.1"
+    NCD_DIABETES_PREVALENCE_AGESTD:
+      label: Diabetes prevalence, adults 18+, age-standardized (%)
+      short: Diabetes
+      domain: risk_factor
+      age_group: AGEGROUP_YEARS18-PLUS
+    NCD_BMI_30A:
+      label: Obesity (BMI ≥ 30), adults 18+, age-standardized (%)
+      short: Obesity
+      domain: risk_factor
+      age_group: AGEGROUP_YEARS18-PLUS
+    NCD_PAA:
+      label: Insufficient physical activity, adults 18+, age-standardized (%)
+      short: Physical inactivity
+      domain: risk_factor
+      age_group: AGEGROUP_YEARS18-PLUS
+    M_Est_tob_curr_std:
+      label: Current tobacco use, age-standardized (%)
+      short: Tobacco use
+      domain: risk_factor
+      age_group: null
+    NCD_HYP_PREVALENCE_A:
+      label: Hypertension prevalence, 30–79, age-standardized (%)
+      short: Hypertension
+      domain: cascade
+      age_group: null
+    NCD_HYP_DIAGNOSIS_A:
+      label: Hypertension diagnosed, % of hypertensives (age-std.)
+      short: Diagnosed
+      domain: cascade
+      age_group: null
+    NCD_HYP_TREATMENT_A:
+      label: Hypertension treated, % of hypertensives (age-std.)
+      short: Treated
+      domain: cascade
+      age_group: null
+    NCD_HYP_CONTROL_A:
+      label: Hypertension controlled, % of hypertensives (age-std.)
+      short: Controlled
+      domain: cascade
+      age_group: null
+    GHED_CHEGDP_SHA2011:
+      label: Current health expenditure (% of GDP)
+      short: CHE % GDP
+      domain: financing
+      age_group: null
+    GHED_CHE_pc_US_SHA2011:
+      label: Current health expenditure per capita (current US$)
+      short: CHE per capita (US$)
+      domain: financing
+      age_group: null
+    GHED_GGHE-D_pc_US_SHA2011:
+      label: Domestic general government health expenditure per capita (US$)
+      short: Government health spend per capita (US$)
+      domain: financing
+      age_group: null
+    GHED_OOPSCHE_SHA2011:
+      label: Out-of-pocket expenditure (% of CHE)
+      short: Out-of-pocket share
+      domain: financing
+      age_group: null
+
+# WHO tobacco estimates include model projections beyond the last observed year.
+max_observed_year: 2024
+
+sdg_3_4:
+  baseline_year: 2015
+  target_year: 2030
+  relative_reduction: 0.3333   # SDG 3.4: reduce premature NCD mortality by one third
+
+# ---------------------------------------------------------------------------
+# Health-economic scenario: scaling up hypertension control in Libya
+# ---------------------------------------------------------------------------
+# STATUS OF PARAMETERS
+#   source: data        -> taken from the WHO snapshot at run time
+#   source: literature  -> must be backed by a citation in docs/ECONOMIC_MODEL.md
+#   source: assumption  -> ILLUSTRATIVE placeholder; replace with a Libyan/
+#                          regional sourced value before drawing conclusions.
+# dist: distribution for probabilistic sensitivity analysis (PSA).
+economics:
+  currency: USD
+  horizon_years: 5
+  discount_rate: 0.03
+  target_control_rate: 0.50      # scenario: half of all hypertensives controlled
+  wtp_multiples_of_gdp_pc: [0.5, 1.0, 3.0]
+  psa_iterations: 5000
+  random_seed: 20260924
+  params:
+    population_30_79:
+      value: 3000000
+      source: assumption
+      note: Replace with UN World Population Prospects estimate for Libya, ages 30–79.
+      dist: {type: normal, sd: 150000}
+    annual_cost_per_controlled_patient:
+      value: 60
+      source: assumption
+      note: Generic antihypertensives + follow-up visits (US$/patient/year). Replace with Libyan costing.
+      dist: {type: gamma, cv: 0.30}
+    programme_cost_per_additional_patient:
+      value: 25
+      source: assumption
+      note: Screening, training, information system per newly controlled patient (US$/year).
+      dist: {type: gamma, cv: 0.40}
+    baseline_cvd_event_rate_uncontrolled:
+      value: 0.020
+      source: assumption
+      note: Annual major CVD events per uncontrolled hypertensive. Replace with regional cohort data.
+      dist: {type: beta, sd: 0.005}
+    relative_risk_reduction_if_controlled:
+      value: 0.20
+      source: literature
+      note: ~20% fewer major CVD events per 10 mmHg SBP reduction (Ettehad et al., Lancet 2016). Verify and cite.
+      dist: {type: beta, sd: 0.03}
+    cost_per_cvd_event:
+      value: 2500
+      source: assumption
+      note: Acute care cost per major CVD event (US$). Replace with Libyan hospital costing.
+      dist: {type: gamma, cv: 0.40}
+    dalys_per_cvd_event:
+      value: 3.0
+      source: assumption
+      note: Discounted DALYs lost per major CVD event. Derive from GBD Libya once downloaded.
+      dist: {type: gamma, cv: 0.30}

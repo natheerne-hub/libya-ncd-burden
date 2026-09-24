@@ -1,0 +1,40 @@
+name: Reproduce analysis
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: "0 6 1 * *"   # monthly: check the WHO API still returns the expected schema
+  workflow_dispatch:
+
+jobs:
+  snapshot:
+    name: Tests + pipeline on committed snapshot
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - run: pytest -q
+      - run: python run_pipeline.py
+      - name: Fail if committed outputs are stale
+        run: git diff --exit-code -- outputs/RESULTS.md
+      - uses: actions/upload-artifact@v4
+        with:
+          name: outputs
+          path: outputs/
+
+  live-api:
+    name: Live WHO GHO fetch (non-blocking)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -r requirements.txt
+      - run: python run_pipeline.py --fetch

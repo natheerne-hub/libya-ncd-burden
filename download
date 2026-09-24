@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.venv/
+.ipynb_checkpoints/
+# Fresh API pulls are reproducible; the committed snapshot is the source of truth for CI
+data/raw/*
+!data/raw/.gitkeep
+# GBD data may not be redistributed — keep your export local
+data/external/*
+!data/external/.gitkeep
