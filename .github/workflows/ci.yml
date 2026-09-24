@@ -28,6 +28,11 @@ jobs:
       - run: pip install -r requirements.txt
       - run: pytest -q
       - run: python run_pipeline.py
+      - name: Build policy brief PDFs (English + Arabic)
+        run: |
+          pip install playwright
+          python -m playwright install --with-deps chromium
+          python docs/brief/build_brief.py --pdf
       - name: Fail if committed outputs are stale (pull requests)
         if: github.event_name == 'pull_request'
         run: git diff --exit-code -- outputs/RESULTS.md
@@ -36,7 +41,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898702+github-actions[bot]@users.noreply.github.com"
-          git add outputs
+          git add outputs docs/brief/*.pdf
           git diff --cached --quiet || (git commit -m "Regenerate outputs [skip ci]" && git push)
       - uses: actions/upload-artifact@v4
         with:
