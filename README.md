@@ -29,7 +29,7 @@ health-economic model for one concrete intervention: **scaling up hypertension c
 | ⚠️ **Risk factors** | Libya ranks **highest of the five countries** for diabetes (28.0%), hypertension (42.7%) and physical inactivity (45.6%), and second for obesity (33.7%). |
 | 🩺 **Care cascade** | Of Libyans with hypertension, **52% are undiagnosed** and only **11%** have it controlled (2019). |
 | 💰 **Financing** | Libya has the highest health spending per person in the group (US$470, 2023) and the lowest out-of-pocket share (19%), but per-capita spending is the most volatile (SD of year-on-year change ≈ 28% vs. 8–15% for neighbours). |
-| 🧮 **Economics** *(preliminary)* | Raising hypertension control to 50% costs about **US$1,950 per DALY averted** (PSA median US$2,000; 95% UI 650–5,300), with a **99% probability of being cost-effective at 1× GDP per capita** (79% at 0.5×). 6 of 7 inputs are sourced: WHO, UN WPP, GBD 2023, WHO HEARTS costing, the Ettehad 2016 meta-analysis and Moroccan cost-of-illness studies. |
+| 🧮 **Economics** *(preliminary)* | Raising hypertension control to 50% costs about **US$1,950 per DALY averted** (PSA median US$2,000; 95% UI 650–5,300), with a **99% probability of being cost-effective at 1× GDP per capita** (US$6,318, World Bank 2024; 81% at 0.5×). 6 of 7 inputs are sourced: WHO, UN WPP, GBD 2023, WHO HEARTS costing, the Ettehad 2016 meta-analysis and Moroccan cost-of-illness studies. |
 
 <p align="center"><img src="outputs/figures/01_premature_ncd_mortality.png" width="85%"></p>
 <p align="center"><img src="outputs/figures/04_hypertension_cascade.png" width="85%"></p>
