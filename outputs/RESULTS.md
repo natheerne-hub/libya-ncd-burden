@@ -64,8 +64,8 @@ In Libya, 52% of people with hypertension are undiagnosed and only **11.1%** are
 
 ## 5. Health-economic scenario: hypertension control to 50% in Libya
 
-> ⚠️ **Partly illustrative.** 3 of 7 inputs are still placeholders (`source: assumption` in `config.yaml`:
-> `programme_cost_per_additional_patient`, `baseline_cvd_event_rate_uncontrolled`, `dalys_per_cvd_event`). Treat the results as preliminary until those are sourced.
+> ⚠️ **Partly illustrative.** 1 of 7 inputs is still a placeholder (`source: assumption` in `config.yaml`:
+> `programme_cost_per_additional_patient`). Two structural assumptions sit inside the GBD derivation (section 6). Treat the results as preliminary.
 
 Inputs from data (2019): prevalence 42.7%, current control 11.1%.
 Implied GDP per capita (WHO GHED): US$6,027.
@@ -74,19 +74,26 @@ Implied GDP per capita (WHO GHED): US$6,027.
 |---|---:|
 | Additional people controlled | 585,925 |
 | Gross programme cost (US$) | 144,901,709 |
-| Averted CVD treatment costs (US$) | 38,640,456 |
-| Net cost (US$) | 106,261,253 |
-| Major CVD events averted | 11,719 |
-| DALYs averted (discounted) | 32,200 |
-| **Net cost per DALY averted** | **US$3,300** |
+| Averted CVD treatment costs (US$) | 19,496,593 |
+| Net cost (US$) | 125,405,116 |
+| Major CVD events averted | 5,913 |
+| DALYs averted (discounted) | 64,353 |
+| **Net cost per DALY averted** | **US$1,949** |
 
-PSA (5,000 draws): median ICER US$3,409
-(95% UI 507 to 10,942). Probability cost-effective — 0.5x GDP/cap: 42% · 1x GDP/cap: 82% · 3x GDP/cap: 100%.
+PSA (5,000 draws): median ICER US$1,993
+(95% UI 646 to 5,321). Probability cost-effective — 0.5x GDP/cap: 79% · 1x GDP/cap: 99% · 3x GDP/cap: 100%.
 Most influential input: `baseline_cvd_event_rate_uncontrolled`.
 
 ![Tornado](figures/06_tornado.png)
 ![CEAC](figures/07_ceac.png)
 
-## 6. GBD module
+## 6. Inputs derived from GBD 2023 (Libya)
 
-skipped — add data/external/gbd_libya.csv (see data/README.md)
+From `data/snapshot/gbd_2023_libya_extract.csv` (GBD 2023 round, year 2023, all ages, both sexes): 25,398 incident ischaemic heart disease + stroke events and 379,212 DALYs, 93% of them from premature death (YLL).
+
+| Derived input | Value | Assumption behind it |
+|---|---:|---|
+| Annual major CVD event rate in hypertensives | 1.01% | hypertensives at 2× the risk of normotensives (0.89% at 1.5×, 1.17% at 3×) |
+| DALYs per event (discounted) | 11.9 | 14.9 undiscounted, spread over 15 years |
+
+Citation: Global Burden of Disease Collaborative Network. GBD 2023 Results. IHME, 2024.
