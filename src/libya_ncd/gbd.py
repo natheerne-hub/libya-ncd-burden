@@ -121,3 +121,57 @@ def derive_economic_inputs(extract: pd.DataFrame, population_30_79: float, preva
         "dalys_per_event_undiscounted": float(undiscounted),
         "dalys_per_event_discounted": float(undiscounted * discount_factor),
     }
+
+
+# --- Level-2 cause burden (leading causes, cross-country shares, shocks over time) -------
+LEVEL2_CAUSES = {
+    344: "Neglected tropical diseases & malaria", 386: "Nutritional deficiencies", 410: "Neoplasms",
+    491: "Cardiovascular diseases", 508: "Chronic respiratory diseases", 526: "Digestive diseases",
+    542: "Neurological disorders", 558: "Mental disorders", 626: "Musculoskeletal disorders",
+    640: "Other non-communicable diseases", 653: "Skin & subcutaneous diseases", 669: "Sense organ diseases",
+    688: "Transport injuries", 696: "Unintentional injuries", 717: "Self-harm & interpersonal violence",
+    955: "HIV/AIDS & STIs", 956: "Respiratory infections & TB", 957: "Enteric infections",
+    961: "Other infectious diseases", 962: "Maternal & neonatal disorders", 973: "Substance use disorders",
+    974: "Diabetes & kidney diseases",
+}
+LOCATION_ISO3 = {139: "DZA", 141: "EGY", 147: "LBY", 148: "MAR", 154: "TUN"}
+
+
+def extract_burden(export_path: Path, focus_location_id: int = 147, comparison_years=(2022,)) -> pd.DataFrame:
+    """Level-2 DALYs (number, share of all DALYs) and YLDs. Every year for the focus country;
+    only `comparison_years` for the others, which keeps the committed extract small."""
+    df = pd.read_csv(export_path)
+    d = df[df.cause_id.isin(LEVEL2_CAUSES) & df.location_id.isin(LOCATION_ISO3)
+           & (df.age_id == AGE_ALL) & (df.sex_id == 3) & df.measure_id.isin([2, 3])]
+    keep = (d.location_id == focus_location_id) | d.year.isin(comparison_years)
+    d = d[keep]
+    w = d[d.metric_id.isin([1, 2])].pivot_table(index=["location_id", "cause_id", "year"],
+                                                columns=["measure_id", "metric_id"], values="val")
+    out = pd.DataFrame({
+        "dalys": w[(2, 1)],
+        "dalys_share_pct": 100 * w[(2, 2)],
+        "ylds": w[(3, 1)],
+    }).reset_index()
+    out.insert(0, "iso3", out.location_id.map(LOCATION_ISO3))
+    return out.drop(columns="location_id").sort_values(["iso3", "cause_id", "year"]).reset_index(drop=True)
+
+
+def load_burden(path: Path) -> pd.DataFrame:
+    """Read the committed level-2 extract and attach English cause names."""
+    b = pd.read_csv(path)
+    b.insert(1, "cause", b.cause_id.map(LEVEL2_CAUSES))
+    if b.cause.isna().any():
+        raise ValueError("unknown cause_id in burden extract")
+    return b
+
+
+def leading_causes(burden: pd.DataFrame, iso3: str, year: int, n: int = 10) -> pd.DataFrame:
+    x = burden[(burden.iso3 == iso3) & (burden.year == year)].copy()
+    x["ylls"] = x.dalys - x.ylds
+    x["yll_share_pct"] = 100 * x.ylls / x.dalys
+    return x.sort_values("dalys", ascending=False).head(n).reset_index(drop=True)
+
+
+def share_matrix(burden: pd.DataFrame, year: int, causes: list[str]) -> pd.DataFrame:
+    x = burden[(burden.year == year) & burden.cause.isin(causes)]
+    return x.pivot_table(index="cause", columns="iso3", values="dalys_share_pct").reindex(causes)
