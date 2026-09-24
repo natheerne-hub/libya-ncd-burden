@@ -102,7 +102,8 @@ def run(fetch: bool = False) -> dict:
         prevalence=(prevalence, econ.ci_to_sd(prev_row.low, prev_row.high) / 100),
         current_control=(control, econ.ci_to_sd(ctrl_row.low, ctrl_row.high) / 100),
     )
-    gdp_pc = results["financing"][focus]["implied_gdp_per_capita_usd"]
+    gdp_cfg = cfg["economics"].get("gdp_per_capita")
+    gdp_pc = float(gdp_cfg["value_usd"]) if gdp_cfg else results["financing"][focus]["implied_gdp_per_capita_usd"]
     multiples = cfg["economics"]["wtp_multiples_of_gdp_pc"]
     curve = econ.ceac(psa, np.linspace(0, 3.5 * gdp_pc, 141))
     curve.to_csv(TABLES / "ceac.csv", index=False)
@@ -110,6 +111,7 @@ def run(fetch: bool = False) -> dict:
         "input_year": cas["year"], "prevalence": prevalence, "current_control": control,
         "target_control": cfg["economics"]["target_control_rate"], "base_case": base,
         "gdp_per_capita_usd": gdp_pc,
+        "gdp_per_capita_source": (f"{gdp_cfg['source']}, {gdp_cfg['year']}" if gdp_cfg else "implied from WHO GHED"),
         "psa_icer_median": float(psa.icer_per_daly.median()),
         "psa_icer_95ui": [float(psa.icer_per_daly.quantile(0.025)), float(psa.icer_per_daly.quantile(0.975))],
         "prob_cost_effective": {f"{k:g}x_gdp": float(((k * gdp_pc * psa.dalys_averted - psa.net_cost) > 0).mean())
